@@ -1,0 +1,20 @@
+input {
+  tcp {
+    port => 5044
+    codec => json_lines
+  }
+}
+
+filter {
+  mutate {
+    remove_field => [ "host", "@version" ]
+  }
+}
+
+output {
+  elasticsearch {
+    hosts => ["http://localhost:9200"]
+    index => "spring-boot-logs"
+  }
+  stdout { codec => rubydebug }
+}
